@@ -1,7 +1,8 @@
 -- Qual foi a categoria de produtos mais vendido?
+
 SELECT
-    c.Categoria,
-    count(pp.ID_Pedido) as orders
+	c.Categoria,
+	count(pp.ID_Pedido) as orders
 FROM
 	categorias c
 JOIN
@@ -17,8 +18,8 @@ ORDER BY
 
 SELECT
 	l.loja,
-    pp.Nome_Produto,
-    SUM(p.Qtd_Vendida) as quantidade_vendida
+	pp.Nome_Produto,
+	SUM(p.Qtd_Vendida) as quantidade_vendida
 FROM
 	pedidos p
 JOIN
@@ -27,10 +28,10 @@ JOIN
 	lojas l ON l.id_loja = p.ID_Loja
 GROUP BY
 	l.loja,
-    pp.Nome_Produto
+	pp.Nome_Produto
 ORDER BY
 	l.loja,
-    quantidade_vendida desc;
+	quantidade_vendida desc;
     
    WITH ProdutosMaisVendidos AS (
     SELECT
@@ -49,13 +50,13 @@ ORDER BY
         pp.Nome_Produto
 )
 SELECT
-    loja,
-    Nome_Produto,
-    quantidade_vendida
+    	loja,
+    	Nome_Produto,
+    	quantidade_vendida
 FROM
-    ProdutosMaisVendidos
+    	ProdutosMaisVendidos
 WHERE
-    ranking = 1
+    	ranking = 1
 ORDER BY
 	quantidade_vendida desc;
 
@@ -63,7 +64,7 @@ ORDER BY
 
 SELECT
 	ID_Cliente,
-    ROUND(AVG(Preco_Unit), 2) as media_gasto
+    	ROUND(AVG(Preco_Unit), 2) as media_gasto
 FROM
 	pedidos p
 GROUP BY
@@ -76,8 +77,8 @@ select ROUND(avg(Preco_Unit),2) from pedidos;
 WITH top_clientes AS (
 SELECT
 	p.ID_Cliente,
-    CONCAT(c.Nome, ' ', c.Sobrenome) as Customer,
-    count(*) as Orders,
+    	CONCAT(c.Nome, ' ', c.Sobrenome) as Customer,
+    	count(*) as Orders,
 	DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS ranking
 FROM
 	clientes c
@@ -85,15 +86,15 @@ JOIN
 	pedidos p ON c.ID_Cliente = p.ID_Cliente
 GROUP BY
 	p.ID_Cliente,
-    Customer
+    	Customer
 ORDER BY
 	Orders desc
 )
 SELECT
-    ID_Cliente,
-    Customer,
-    Orders,
-    ranking
+    	ID_Cliente,
+    	Customer,
+    	Orders,
+    	ranking
 FROM
 	top_clientes
 WHERE
@@ -103,7 +104,7 @@ WHERE
 
 SELECT
 	pp.Nome_Produto,
-    count(*) as quantidade
+    	count(*) as quantidade
 FROM
 	pedidos p
 JOIN
@@ -117,7 +118,7 @@ ORDER BY
 
 SELECT
 	l.loja,
-    ROUND(AVG(p.Preco_Unit), 2 ) as ticket_medio
+    	ROUND(AVG(p.Preco_Unit), 2 ) as ticket_medio
 FROM
 	pedidos p
 JOIN
@@ -131,15 +132,15 @@ ORDER BY
 
 SELECT 
 	p.ID_Loja,
-    l.loja,
-    sum(p.Receita_Venda) as Receita_Por_Loja
+    	l.loja,
+    	sum(p.Receita_Venda) as Receita_Por_Loja
 FROM
 	pedidos p
 JOIN
 	lojas l ON p.ID_Loja = l.ID_Loja
 GROUP BY
 	p.ID_Loja,
-    l.loja
+    	l.loja
 ORDER BY
 	 Receita_Por_Loja DESC;
     
@@ -147,9 +148,9 @@ ORDER BY
 
 SELECT
 	ll.Loja,
-    l.Estado,
-    sum(p.Qtd_Vendida) AS qtd_vendida,
-    sum(p.Receita_Venda) - sum(p.Custo_Venda) as lucro
+    	l.Estado,
+    	sum(p.Qtd_Vendida) AS qtd_vendida,
+    	sum(p.Receita_Venda) - sum(p.Custo_Venda) as lucro
 FROM
 	locais l
 JOIN
@@ -158,9 +159,9 @@ JOIN
 	pedidos p ON ll.ID_Loja = p.ID_Loja
 GROUP BY
 	ll.Loja,
-    l.Estado
+    	l.Estado
 ORDER BY
-    lucro desc;
+    	lucro desc;
     
 -- Qual a média salarial dos nossos clientes?
 
@@ -173,8 +174,8 @@ FROM
 
 SELECT
 	extract(month from Data_Venda) as Mes,
-    DATE_FORMAT(Data_Venda, '%M') as Nome_Mes,
-    sum(Receita_Venda) as Total_Vendas
+    	DATE_FORMAT(Data_Venda, '%M') as Nome_Mes,
+    	sum(Receita_Venda) as Total_Vendas
 FROM
 	pedidos
 GROUP BY
@@ -183,13 +184,11 @@ GROUP BY
 ORDER BY
 	Total_Vendas desc;
     
-    
-    
 -- Qual o foi o lucro real que cada cliente deu ao longo do tempo?
 
 select
 	ID_Cliente,
-    sum(Receita_Venda) - sum(Custo_Venda) as lucro
+    	sum(Receita_Venda) - sum(Custo_Venda) as lucro
  from
 	pedidos
  group by
@@ -201,24 +200,24 @@ select
 
 select
 	c.ID_Cliente,
-    c.Nome,
-    count(Qtd_Vendida) AS QTD,
-    sum(p.Receita_Venda) - sum(p.Custo_Venda) as lucro
+    	c.Nome,
+    	count(Qtd_Vendida) AS QTD,
+    	sum(p.Receita_Venda) - sum(p.Custo_Venda) as lucro
 from
 	clientes c
 JOIN
 	pedidos p ON c.ID_Cliente = p.ID_Cliente
 GROUP BY
 		c.ID_Cliente,
-    c.Nome
+    	c.Nome
 ORDER BY
 	QTD desc;
     
 -- Analisando duplicidade de pedidos
     
 SELECT
-    ID_Pedido,
-    count(ID_Pedido) AS Pedidos_Duplicados
+    	ID_Pedido,
+    	count(ID_Pedido) AS Pedidos_Duplicados
 FROM
 	pedidos
 GROUP BY
@@ -226,19 +225,14 @@ GROUP BY
 HAVING
 	count(ID_Pedido) > 1;
 
---
-select * from pedidos;
-    
 -- Receita média por mês
 
 SELECT
 	extract(month from data_venda),
-    date_format(data_venda, '%M'),
-    avg(receita_venda)
+   	date_format(data_venda, '%M'),
+    	avg(receita_venda)
 FROM
 	pedidos
 GROUP BY
 	extract(month from data_venda),
-    date_format(data_venda, '%M');
-    
-select * from produtos;
+    	date_format(data_venda, '%M');
